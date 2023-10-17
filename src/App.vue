@@ -1,18 +1,51 @@
 <script setup>
   import Pokemon from './components/Pokemon.vue';
-  import { onMounted, ref } from 'vue';
+  import { ref, computed } from 'vue';
 
-  const props = defineProps(['pokemon', 'pokemonTypes']);
-  console.log(props);
-  
-  let filteredPokemon = ref([])
+  const props = defineProps({
+    pokemonTypes: {
+      type: Array,
+      required: true
+    },
+    pokemons: {
+      type: Array,
+      required: true
+    }
+  });
 
-  const filterByText = (event) => {
-    filteredPokemon.value = props.pokemon.filter((pokemon) => 
-      pokemon.name.includes(event.target.value));
+  const filterText = ref('');
+  const filterTypes = ref([]);
+
+  const filteredPokemons = computed(
+    () =>  {
+      const filteredByName = filterText.value 
+        ? props.pokemons.filter(p => p.name.includes(filterText.value) )
+        : props.pokemons
+
+      return filterTypes.value.length 
+        ? filteredByName.filter(
+          p => arraysIntersect(filterTypes.value, p.types))
+        : filteredByName
+    }
+  );
+
+  function arraysIntersect(arr1, arr2) {
+    let isSubset = true;
+    for (let i = 0; i < arr1.length; i++) {
+      let found = false;
+      for (let j = 0; j < arr2.length; j++) {
+        if (arr1[i] === arr2[j]) {
+          found = true;
+          break;
+        }
+      }
+      if (!found) {
+        isSubset = false;
+        break;
+      }
+    }
+    return isSubset;
   }
-
-  onMounted(() => {filteredPokemon.value = props.pokemon})
 </script>
 
 <template>
@@ -21,21 +54,22 @@
       <input type="text"
         class="pokemon-filter__input" 
         placeholder="search for pokemon..."
-        @keyup="filterByText">
+        v-model="filterText">
       <div class="pokemon-filter__types">
-        <label for="test"
-          v-for="type in props.pokemonTypes">
-            {{ type.name }}
+        <label :for="type.name"
+          v-for="type in pokemonTypes">
           <input 
+          v-model="filterTypes"
+          :value="type.name"
           type="checkbox" 
-          name="test" 
-          id="test">
+          :id="type.name">
+            <span>{{ type.name }}</span>
         </label>
       </div>
     </div>
   </section>
   <section class="pokemon-wrapper">
-    <Pokemon v-for="pokemon in filteredPokemon" :pokemon-data="pokemon"/>
+    <Pokemon v-for="pokemon in filteredPokemons" :pokemon-data="pokemon"/>
   </section>
 </template>
 
@@ -60,23 +94,45 @@
     }
 
     &__types {
-      display: flex;
-      flex-wrap: wrap;
-      gap: .5rem;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
       margin-top: 1rem;
 
-      & > label {
-        flex: 1 0 15%;
-        max-width: 15%;
-        padding: .5rem;
-        border-radius: 8px;
-        background-color: white;
-        transition: background-color .1s ease-in;
+      > label {
 
-        &:hover {
+        input {
+          display: none;
+        }
+
+        span {
+          background-color: white;
+          transition: background-color .1s ease-in;
+          display: block;
+          padding: .5rem;
+          border-radius: 8px;
           cursor: pointer;
+          text-align: center;
+          border: 1px solid lightgrey;
+          border-radius: 8px;
+
+          &:hover {
+            background-color: darken(white, 2%);
+          }
+        }
+
+        input:checked + span {
           background-color: darken(white, 10%);
         }
+      }
+
+      @media (min-width: 780px) {
+        grid-template-columns: repeat(5, 1fr);
+        gap: .5rem;
+      }
+
+      @media (min-width: 1024px) {
+        grid-template-columns: repeat(8, 1fr);
       }
     }
 
@@ -85,8 +141,7 @@
       display: block;
       padding: 1rem;
       border-radius: 8px;
-      box-shadow: rgba(0, 0, 0, 0.64) 0px 1px 4px;
-      border: none;
+      border: 1px solid lightgrey;
       font-size: 1rem;
 
       &:focus {

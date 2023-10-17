@@ -1,16 +1,18 @@
 <script setup>
   defineProps({
-    pokemonData: Object
+    pokemonData: {
+      type: Object
+    }
   })
 </script>
 
 <template>
   <article class="pokemon-card">
     <h3>{{ pokemonData.name }}</h3>
-    <img :src="pokemonData.image" alt="">
+    <img :src="pokemonData.img" alt="">
     <div class="types-wrapper">
       <p v-for="type in pokemonData.types">
-        {{ type.type.name }}
+        {{ type }}
       </p>
     </div>
   </article>
@@ -32,6 +34,12 @@
     &:hover {
       box-shadow: rgba(0, 0, 0, 0.34) 0px 10px 13px;
       cursor: pointer;
+    }
+
+    > img {
+      display: block;
+      width: 96px;
+      height: 96px;
     }
   }
 </style>

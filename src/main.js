@@ -3,33 +3,31 @@ import './style.scss';
 import App from './App.vue';
 import PokemonApiService from './services/pokemon-api.js';
 
-let pokemon = [];
-let pokemonTypes = [];
+async function initializePokemonData() {
+  if (localStorage.getItem('pokemons')) {
+    const pokemons = JSON.parse(localStorage.getItem('pokemons'));
+    const pokemonTypes = JSON.parse(localStorage.getItem('pokemon-types'));
 
-function getFromLocalStorageByKey(key) {
-  const jsonObject = localStorage.getItem(key)
+    return {
+      pokemonTypes,
+      pokemons
+    }
+  } else {
+    const pokemons = await PokemonApiService
+      .fetchIndividualPokemons(await PokemonApiService.fetchPokemonData());
 
-  return JSON.parse(jsonObject);
+    const pokemonTypes = await PokemonApiService.fetchPokemonTypes();
+
+    localStorage.setItem('pokemons', JSON.stringify(pokemons));
+    localStorage.setItem('pokemon-types', JSON.stringify(pokemonTypes));
+
+    return {
+      pokemonTypes,
+      pokemons
+    }
+  }
 }
+initializePokemonData()
+  .then((res) => createApp(App, res).mount('#app')
+);
 
-if (localStorage.getItem('pokemon')) {
-  pokemon = getFromLocalStorageByKey('pokemon');
-} else {
-  PokemonApiService.fetchPokemonData().then((data) => {
-    localStorage.setItem('pokemon', JSON.stringify(data));
-
-    pokemon = data;
-  });
-}
-
-if (localStorage.getItem('pokemon-types')) {
-  pokemonTypes = getFromLocalStorageByKey('pokemon-types');
-} else {
-  PokemonApiService.fetchPokemonTypes().then((data) => {
-    localStorage.setItem('pokemon-types', JSON.stringify(data));
-
-    pokemonTypes = data;
-  });
-}
-
-createApp(App, {pokemon: pokemon, pokemonTypes: pokemonTypes }).mount('#app');
