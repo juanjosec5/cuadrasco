@@ -23,9 +23,6 @@
         placeholder="search for pokemon..."
         @keyup="filterByText">
       <div class="pokemon-filter__types">
-        <button v-for="types in props.pokemonTypes" class="pokemon-filter__button">
-          {{ types.name }}
-        </button>
         <label for="test"
           v-for="type in props.pokemonTypes">
             {{ type.name }}
@@ -68,7 +65,7 @@
       gap: .5rem;
       margin-top: 1rem;
 
-      & > button {
+      & > label {
         flex: 1 0 15%;
         max-width: 15%;
         padding: .5rem;
