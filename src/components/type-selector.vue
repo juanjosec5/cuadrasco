@@ -1,0 +1,84 @@
+<script setup>
+    import { usePokemonTypes } from '../store/pokemon-types';
+    import { useFilters } from '../store/filters';
+
+    const filtersStore = useFilters();
+    const typeStore = usePokemonTypes();
+</script>
+
+<template>
+  <section class="pokemon-filter__types">
+    <label :for="type" v-for="type in typeStore.types" tabindex="0">
+      <input 
+        v-model="filtersStore.selectedTypes"
+        :value="type"
+        type="checkbox" 
+        :id="type">
+      <span>{{ type }}</span>
+    </label>
+  </section>
+</template>
+
+
+<style lang="scss">
+  .pokemon-filter {
+    margin: 2rem 0;
+
+    &__wrapper {
+      display: flex;
+      flex-direction: column;
+      place-content: center;
+      padding: 0 2rem;
+      margin: 0 auto;
+    }
+
+    &__types {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin: 1rem 1rem 0;
+
+      > label {
+        &:focus {
+          outline: 0;
+
+          span {
+            box-shadow: 0 0 0 2px rgb(170, 170, 237);
+          }
+        }
+
+        input {
+          display: none;
+        }
+
+        span {
+          background-color: white;
+          transition: background-color .1s ease-in;
+          display: block;
+          padding: .5rem;
+          border-radius: 8px;
+          cursor: pointer;
+          text-align: center;
+          border: 1px solid lightgrey;
+          border-radius: 8px;
+
+          &:hover {
+            background-color: darken(white, 2%);
+          }
+        }
+
+        input:checked + span {
+          background-color: darken(white, 10%);
+        }
+      }
+
+      @media (min-width: 780px) {
+        grid-template-columns: repeat(5, 1fr);
+        gap: .5rem;
+      }
+
+      @media (min-width: 1024px) {
+        grid-template-columns: repeat(8, 1fr);
+      }
+    }
+  }</style>

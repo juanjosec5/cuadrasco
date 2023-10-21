@@ -41,5 +41,10 @@
       width: 96px;
       height: 96px;
     }
+
+    .types-wrapper {
+      display: flex;
+      gap: 1rem;
+    }
   }
 </style>

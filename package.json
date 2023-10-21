@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "json-server": "^0.17.4",
+    "pinia": "^2.1.7",
     "sass": "^1.69.3",
     "vue": "^3.3.4",
     "vuex": "^4.1.0"
