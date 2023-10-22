@@ -19,8 +19,7 @@
   .pokemon-wrapper {
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 2rem;
     margin-top: 2rem;
-    padding: 0 1rem;
     place-content: center;
   }</style>

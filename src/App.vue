@@ -3,11 +3,11 @@
   import searchBar from './components/search-bar.vue';
   import pokemonGrid from './components/pokemon-grid.vue';
   import genSelector from './components/gen-selector.vue';
+  import filtersWrapper from './components/filters-wrapper.vue';
 </script>
 
 <template>
   <search-bar/>
-  <gen-selector/>
-  <type-selector/>
+  <filters-wrapper/>
   <pokemon-grid/>
 </template>

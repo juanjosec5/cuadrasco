@@ -10,11 +10,21 @@
   <section class="pokemon-filter__types">
     <label :for="type" v-for="type in typeStore.types" tabindex="0">
       <input 
+        v-if="type !== 'unknown'"
         v-model="filtersStore.selectedTypes"
         :value="type"
         type="checkbox" 
         :id="type">
       <span>{{ type }}</span>
+    </label>
+
+    <label class="clear" for="clear" tabindex="0">
+      <input 
+        v-model="filtersStore.selectedTypes"
+        type="checkbox" 
+        @click="filtersStore.selectedTypes = []"
+        id="clear">
+      <span class="clear-span">clear all</span>
     </label>
   </section>
 </template>
@@ -35,8 +45,7 @@
     &__types {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 1rem;
-      margin: 1rem 1rem 0;
+      gap: .5rem;
 
       > label {
         &:focus {
@@ -56,11 +65,10 @@
           transition: background-color .1s ease-in;
           display: block;
           padding: .5rem;
-          border-radius: 8px;
+          border-radius: 20px;
           cursor: pointer;
           text-align: center;
           border: 1px solid lightgrey;
-          border-radius: 8px;
 
           &:hover {
             background-color: darken(white, 2%);
@@ -68,7 +76,8 @@
         }
 
         input:checked + span {
-          background-color: darken(white, 10%);
+          background-color: #FF4E00;
+          color: white;
         }
       }
 
@@ -79,6 +88,24 @@
 
       @media (min-width: 1024px) {
         grid-template-columns: repeat(8, 1fr);
+      }
+
+      .clear {
+        grid-column: -2 / -1;
+
+        
+        span {
+          background-color: rgb(238, 51, 51);
+          color: white;
+          
+          &:hover {
+            background-color: darken(red, 10%);
+          }
+        }
+      }
+      
+      input:checked + span.clear {
+        background-color: red;
       }
     }
   }</style>

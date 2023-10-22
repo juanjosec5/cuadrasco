@@ -1,4 +1,16 @@
 body {
   overflow-y: scroll;
   font-family: sans-serif;
+  overflow-x: hidden;
+}
+
+*, *::after, *::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  padding: 0 2rem;
 }

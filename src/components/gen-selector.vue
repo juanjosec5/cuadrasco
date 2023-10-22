@@ -18,6 +18,8 @@
 <style lang="scss" scoped>
   select {
     padding: .5rem;
-    margin-top: 2rem;
+    border-radius: 8px;
+    border: 1px solid lightgrey;
+    font-size: 1rem;
   }
 </style>
